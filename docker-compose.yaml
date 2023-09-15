@@ -11,19 +11,19 @@ services:
       networks:
         - dev-network
       ports:
-        - '3306:3306'
+        - '3307:3307'
       volumes:
       - ./data/db:/data/db
 
-  # microservice:
-  #   build:
-  #     context: ./
-  #   ports:
-  #     - '3333:3333'
-  #   depends_on:
-  #     - mariadb
-  #   networks:
-  #     - dev-network
+  microservice:
+    build:
+      context: ./
+    ports:
+      - '3333:3333'
+    depends_on:
+      - mariadb
+    networks:
+      - dev-network
 
 # DEV Network
 networks:

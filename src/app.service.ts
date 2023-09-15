@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { ValidacaoCpf } from './utils/validacaoCPF';
@@ -83,7 +83,7 @@ export class AppService {
     };
 
     const response = await axios.request(reqOptions);
-    console.log(response.data);
+
     if (
       response &&
       response.status === 200 &&
@@ -107,16 +107,14 @@ export class AppService {
   }
 
   async getToken() {
-    // const url =
-    //   'https://api-chatbot.sebrae.com.br/auth/realms/externo/protocol/openid-connect/token';
-    const url = //ENDPOINT MOCKADO
-      'https://private-anon-0f41b95908-registraratendimentossebrae.apiary-mock.com/auth/realms/externo/protocol/openid-connect/token';
+    const url =
+      'https://amei.sebrae.com.br/auth/realms/externo/protocol/openid-connect/token';
 
     const formData = new URLSearchParams();
-    // formData.append('username', 'groodme@groodme.com.br');
-    // formData.append('password', "MkPg'be,}'&a3.{V");
-    // formData.append('client_id', 'conecta');
-    // formData.append('grant_type', 'password');
+    formData.append('username', 'groodme@groodme.com.br');
+    formData.append('password', "MkPg'be,}'&a3.{V");
+    formData.append('client_id', '372001399');
+    formData.append('grant_type', 'password');
 
     const config = {
       headers: {
@@ -132,8 +130,8 @@ export class AppService {
           this.access_token = response.data.access_token;
         }
       })
-      .catch((error) => {
-        console.error('Erro:', error);
+      .catch((error: AxiosError) => {
+        console.error('Erro:', error.message);
       });
   }
 
