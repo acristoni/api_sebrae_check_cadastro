@@ -1,15 +1,70 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
+import { Repository } from 'typeorm';
+import { UserEntity } from './user.entity';
+import { ValidacaoCpf } from './utils/validacaoCPF';
 
 @Injectable()
 export class AppService {
+  public constructor(
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
+    private readonly validacaoCpf: ValidacaoCpf,
+  ) {}
+
   access_token: string;
 
   getHello(): string {
     return 'Microsserviço em execução!';
   }
 
-  async validacao(cpf: string) {
+  async findByDocument(cpf: string): Promise<UserEntity> {
+    try {
+      return await this.userRepository.findOneOrFail({
+        where: { document: cpf },
+      });
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async updateUserSituation(id: string, situacao: boolean) {
+    try {
+      return await this.userRepository.update(id, {
+        registrado_sebrae: situacao,
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async createUser(cpf: string, situacao: boolean) {
+    try {
+      return await this.userRepository.insert({
+        document: cpf,
+        registrado_sebrae: situacao,
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async validacao(cpfFromUser: string): Promise<string> {
+    const cpf = cpfFromUser.replace(/[^0-9]/g, '');
+
+    if (!this.validacaoCpf.validar(cpf)) {
+      throw new HttpException(
+        'CPF fora do padrão da Receita Federal',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     let situacao = 'NÃO está cadastrado';
 
     if (this.access_token === undefined) {
@@ -37,7 +92,15 @@ export class AppService {
       response.data.situacao === 'CADASTRADO'
     ) {
       situacao = 'está cadastrado';
+    }
+
+    const user = await this.findByDocument(cpf);
+    const estaCadastrado = situacao === 'está cadastrado';
+
+    if (user) {
+      this.updateUserSituation(user.id, estaCadastrado);
     } else {
+      this.createUser(cpf, estaCadastrado);
     }
 
     return `Usuário com CPF ${cpf} ${situacao} no sistema do SEBRAE`;

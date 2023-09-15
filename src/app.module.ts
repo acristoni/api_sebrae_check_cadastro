@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 import { UserEntity } from './user.entity';
+import { ValidacaoCpf } from './utils/validacaoCPF';
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import { UserEntity } from './user.entity';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ValidacaoCpf],
 })
 export class AppModule {}

@@ -11,7 +11,7 @@ services:
       networks:
         - dev-network
       ports:
-        - '3307:3307'
+        - '3306:3306'
       volumes:
       - ./data/db:/data/db
 
