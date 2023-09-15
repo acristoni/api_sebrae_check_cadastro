@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" class="login-pf">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script src="https://amei.sebrae.com.br/auth/js/keycloak.js" type="text/javascript"></script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
+      rel="stylesheet">
+
+            <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Entrar em Conta Sebrae</title>
+    <link rel="icon" href="/auth/resources/abxl2/login/sebraecpf/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://base-estatico.sebrae.com.br/pwa-assets/logo-sebrae-reduzido/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://base-estatico.sebrae.com.br/pwa-assets/logo-sebrae-reduzido/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="https://base-estatico.sebrae.com.br/pwa-assets/logo-sebrae-reduzido/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="194x194" href="https://base-estatico.sebrae.com.br/pwa-assets/logo-sebrae-reduzido/favicon-194x194.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://base-estatico.sebrae.com.br/pwa-assets/logo-sebrae-reduzido/favicon-32x32.png" />
+    <link rel="mask-icon" href="https://base-estatico.sebrae.com.br/pwa-assets/logo-sebrae-reduzido/safari-pinned-tab.svg" color="#005eb8" />
+    <link rel="shortcut icon" href="https://base-estatico.sebrae.com.br/pwa-assets/logo-sebrae-reduzido/favicon.ico" />
+            <link href="/auth/resources/abxl2/login/sebraecpf/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <link href="/auth/resources/abxl2/login/sebraecpf/css/login-custom.css" rel="stylesheet" />
+            <script src="/auth/resources/abxl2/login/sebraecpf/js/jquery.js" type="text/javascript"></script>
+            <script src="/auth/resources/abxl2/login/sebraecpf/js/jquery.mask.js" type="text/javascript"></script>
+            <script src="/auth/resources/abxl2/login/sebraecpf/js/bootstrap.min.js" type="text/javascript"></script>
+            <script src="/auth/resources/abxl2/login/sebraecpf/js/theme.js" type="text/javascript"></script>
+            <script src="/auth/resources/abxl2/login/sebraecpf/js/axios.js" type="text/javascript"></script>
+            <script src="/auth/resources/abxl2/login/sebraecpf/js/util.js" type="text/javascript"></script>
+            <script src="/auth/resources/abxl2/login/sebraecpf/js/util-login.js" type="text/javascript"></script>
+            <script src="/auth/resources/abxl2/login/sebraecpf/js/moment.js" type="text/javascript"></script>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WG5CCHZ');</script>
+    <!-- End Google Tag Manager -->
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WG5CCHZ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <script src="https://browser.sentry-cdn.com/5.5.0/bundle.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        var isProduction = location.hostname === 'amei.sebrae.com.br';
+        var gestaoAmei = 'https://api-gateway.sebrae.com.br/gestao-amei';
+        if (!isProduction) {
+            if ("externo" === "externo"){
+                gestaoAmei = 'https://gestao-amei-backend.homologacao.sebrae.com.br/gestao-amei';
+            }
+        }
+        var recaptchaGestaoAMEI = null;
+        function initRecaptchaGestaoAMEI() {
+            if (recaptchaGestaoAMEI !== null) {
+                return;
+            }
+            console.log('iniciando o reCAPTCHA do Gestão AMEI');
+            recaptchaGestaoAMEI = grecaptcha.render('recaptchaGestaoAMEI', {
+                sitekey: '6Lcj4NEmAAAAAICozHk4htpP2dGCApj-zBO-hCgm',
+                size: 'invisible'
+            });
+        }
+
+        function executeRecaptcha(action) {
+            if (isProduction) {
+                initRecaptchaGestaoAMEI();
+                return grecaptcha.execute(recaptchaGestaoAMEI, { action });
+            }
+            var fake = {
+                catch: function() {
+                    return fake;
+                },
+                then: function(callback) {
+                    callback();
+                    return fake;
+                },
+            };
+            return fake;
+        }
+    </script>
+
+
+        <script src="https://www.google.com/recaptcha/api.js?onload=initRecaptchaGestaoAMEI" async defer></script>
+
+
+</head>
+
+<body  class="">
+  <div class="login-pf-page">
+    <div id="kc-header" class="login-pf-page-header">
+       <div id="kc-header-wrapper" class="">Entrar em <strong><div class="kc-logo-text"><span>Conta Sebrae</span></div></strong></div>
+    </div>
+    <div style="color:#fff; display:flex; justify-content:center; flex-flow: column; align-items:center; max-width:420px; margin:0 auto 8px auto; text-align:center">
+
+
+        <p style="font-size:13px">Para acessar as soluções do Sebrae e parceiros, insira seu CPF ou E-mail cadastrados ou crie uma conta. <strong>É rapidinho!</strong></p>
+    </div>
+    <div class="card-pf login-pf-accounts">
+      <header class="login-pf-header">
+        <h4 id="kc-page-title">
+        <!--  Entrar -->
+</h4>
+      </header>
+      <div id="kc-content" class="mt-md">
+        <div id="kc-content-wrapper">
+
+
+
+    <div class="loading-container" id="loading-container">
+        <div class="loading-card">
+            <i class="fa fa-spinner loading-icon" aria-hidden="true"></i>
+        </div>
+    </div>
+        <div style="margin-bottom:20px" class="mensagem error" id="erro" onclick="$('#erro').hide()" ;>
+            <div class="icone"></div>
+            <div style="padding-left:12px" id="mensagemErro">
+                <h4 id="mensagemErro"></h4>
+            </div>
+        </div>
+        <div id="kc-form" class="row">
+            <div id="kc-form-wrapper"
+                 class="col-xs-12 login-pf-social-section">
+                    <form id="kc-form-login" onsubmit="login.disabled = true; return true;" action="https://amei.sebrae.com.br/auth/realms/externo/login-actions/authenticate?session_code=ofygryJbffXjadZxAyHRzudOnGtYvyaWDitvkEzEbrk&amp;execution=e32992aa-e34d-40b5-90e4-d3b30e583ef2&amp;client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U"
+                          method="post">
+                        <div class="form-group has-float-label">
+
+
+                                <input id="username" class="form-control form-sebrae form-control" name="username"
+                                       value="" type="text" autocomplete="off"
+                                       placeholder="CPF"  tabindex="1"/>
+                            <label for="username"
+                                   class="control-label label-sebrae">CPF</label>
+                        </div>
+
+                        <div class="form-group has-float-label has-toggle-password">
+
+                            <input tabindex="2" id="password" class="form-control form-sebrae" name="password"
+                                   type="password" autocomplete="off" placeholder="Senha"/>
+                            <label for="password" class="control-label label-sebrae">Senha</label>
+                            <button class="btn btn-formtoggle" type="button"><i class="uil-eye toggle-password"
+                                                                                toggle="#password"></i></button>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="form-group login-pf-settings">
+                                    <div id="kc-form-options">
+                                            <div class="checkbox fontsize-sm mt-0">
+                                                <label class="remember-me-checkBox">
+                                                    <input style="display:none" tabindex="3" id="rememberMe" name="rememberMe"
+                                                               type="checkbox"  >
+                                                    <div class="corpo-checkBox-rememberMe"></div>
+                                                    <div class="bola-checkBox"></div>
+                                                    <span style="position:relative; left:25px">Lembre-se de mim</span>
+                                                </label>
+                                            </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class=" mt-0 fontsize-sm text-right">
+                                        <span><a tabindex="5"
+                                                 href="/auth/realms/externo/login-actions/reset-credentials?client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U">Esqueceu sua senha?</a></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div id="kc-form-buttons" class="form-group">
+                                    <input tabindex="4"
+                                           class="btn btn-primary btn-block btn-lg"
+                                           name="login" id="kc-login" onclick="logar(event)" type="submit" value="Entrar"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+
+                <div id="kc-social-providers"
+                     class="col-xs-12 login-pf-social-section">
+                    <hr style="background-color: #E0E6EB">
+                    <div style="position: relative; margin:0; top:-30px;width:100%; display:flex; justify-content:center">
+                        <span style="text-align:center; background-color: #FFf; padding: 0 7px">Se preferir, entre com outras contas:</span>
+                    </div>
+                    <ul style="display:flex; justify-content:center;position:relative;top:-15px" class="login-pf-social list-unstyled login-pf-social-all login-pf-social-double-col">
+                            <li class="login-pf-social-link form-sebrae"><a href="/auth/realms/externo/broker/gov.br/login?client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U&amp;session_code=ofygryJbffXjadZxAyHRzudOnGtYvyaWDitvkEzEbrk"
+                                                                                           id="zocial-gov.br"
+                                                                                           class="btn-sm btn-social btn-keycloak-oidc">
+                                    <span>gov.br</span></a></li>
+                            <li class="login-pf-social-link form-sebrae"><a href="/auth/realms/externo/broker/google/login?client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U&amp;session_code=ofygryJbffXjadZxAyHRzudOnGtYvyaWDitvkEzEbrk"
+                                                                                           id="zocial-google"
+                                                                                           class="btn-sm btn-social btn-google">
+                                    <span>Google</span></a></li>
+                            <li class="login-pf-social-link form-sebrae"><a href="/auth/realms/externo/broker/microsoft/login?client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U&amp;session_code=ofygryJbffXjadZxAyHRzudOnGtYvyaWDitvkEzEbrk"
+                                                                                           id="zocial-microsoft"
+                                                                                           class="btn-sm btn-social btn-microsoft">
+                                    <span>Microsoft</span></a></li>
+                            <li class="login-pf-social-link form-sebrae"><a href="/auth/realms/externo/broker/linkedin/login?client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U&amp;session_code=ofygryJbffXjadZxAyHRzudOnGtYvyaWDitvkEzEbrk"
+                                                                                           id="zocial-linkedin"
+                                                                                           class="btn-sm btn-social btn-linkedin">
+                                    <span>LinkedIn</span></a></li>
+                            <li class="login-pf-social-link form-sebrae"><a href="/auth/realms/externo/broker/facebook/login?client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U&amp;session_code=ofygryJbffXjadZxAyHRzudOnGtYvyaWDitvkEzEbrk"
+                                                                                           id="zocial-facebook"
+                                                                                           class="btn-sm btn-social btn-facebook">
+                                    <span>Facebook</span></a></li>
+                            <li class="login-pf-social-link form-sebrae"><a href="/auth/realms/externo/broker/apple/login?client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U&amp;session_code=ofygryJbffXjadZxAyHRzudOnGtYvyaWDitvkEzEbrk"
+                                                                                           id="zocial-apple"
+                                                                                           class="btn-sm btn-social btn-apple">
+                                    <span>Apple</span></a></li>
+                    </ul>
+                </div>
+        </div>
+        <div class="card-login-info">
+               <div class="corpo-info">
+                    <div class="icone">
+
+                    </div>
+                    <div class="informacoes">
+                        <p>Tem algum problema para entrar na sua conta?</p>
+                        <a  href="https://sacnacional.sebrae.com.br/">Acesse a nossa página do <strong>SAC</strong></a>
+                    </div>
+               </div>
+        </div>
+
+              <div id="kc-info" class="login-pf-signup">
+                  <div id="kc-info-wrapper" class="">
+
+            <div style="background-color: #f5f7fa; padding:24px 0 26px 0; display:flex; flex-direction:column; align-items:center; justify-content:center" id="kc-registration" class="text-center">
+                <p style="color:#394D60; padding-bottom: 20px">Ainda não tem uma conta Sebrae?</p>
+                <a style="background-color:#005EB8; box-shadow: 0px 2px 4px rgba(20, 46, 82, 0.2); border-radius: 4px; padding:8px 12px; color: #fff; text-decoration:none; font-size:16px;"
+                tabindex="6" href="/auth/realms/externo/login-actions/registration?client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U">Cadastre-se</a>
+            </div>
+                  </div>
+              </div>
+        </div>
+      </div>
+    </div>
+    <footer class="fontsize-sm" style="max-width: 420px; min-height: 70px; margin: 1em auto; text-align:center; display: grid; place-items: flex-start">
+
+    </footer>
+    <footer style="position: fixed; right: 0; bottom: 0; z-index: 10">
+        <p class="fontsize-xs" style="text-align: right; width: 100%" id="version-info"></p>
+    </footer>
+  </div>
+  <div id="recaptchaGestaoAMEI" style="display:none"></div>
+  <script src="/auth/resources/abxl2/login/sebraecpf/js/theme.js" type="text/javascript"></script>
+  <script>
+    try {
+      fetch('/auth/realms/externo/gestao-amei/version')
+          .then(response => response.json())
+          .then(versions => ['AMEI:', versions.amei])
+          .then(versionList => versionList.join(' '))
+          .then(version => $('#version-info').text(version));
+    } catch (e) { console.error(e) }
+  </script>
+
+</body>
+</html>
+
+<script>
+    $('#erro').hide();
+    $('#loading-container').hide();
+    logar = async (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        $('#loading-container').show();
+
+        let username = document.getElementById('username').value;
+
+        if(username === ''){
+            $('#erro').show();
+            $('#mensagemErro').html("<h4>Favor informar o CPF.</h4>");
+            $('#loading-container').hide();
+            return;
+        }
+
+        // tira a máscara do cpf quando não for e-mail;
+        if (!username.includes("@") && username.length > 11) {
+            username = recuperarApenasNumeros(username);
+            document.getElementById('username').value = username;
+        }
+
+        /*
+        var hostname = window && window.location && window.location.hostname;
+
+        if("externo" === "externo" && hostname !== 'amei.homolog.kubernetes.sebrae.com.br'){
+            let url = 'https://api-cpe.sebrae.com.br/v1/keycloak/public/usuario/'+username;
+
+            let resposta = await fetch(url, {
+                    method: "GET"
+                })
+                    .then((res) => {
+                        if (res.status === 200) {
+                            return res.json();
+                        }
+                    }).then((data) => {
+                        if (data.isExiste) {
+                            $('#erro').hide();
+                            document.getElementById('kc-form-login').submit();
+                        } else {
+                            $('#erro').show();
+                            $('#mensagemErro').html('<div>Usuário informado não existe. <a style="color: #005EB8" href="/auth/realms/externo/login-actions/registration?client_id=chatbot-backend&amp;tab_id=4lqV92ZKV1U">Cadastre-se<div>');
+                        }
+                    }).catch((err) => {
+                        console.log(err)
+                    }).finally(() => {
+                        $('#loading-container').hide();
+                    });
+        }else{
+             document.getElementById('kc-form-login').submit();
+        }  */
+        document.getElementById('kc-form-login').submit();
+    };
+
+</script>
