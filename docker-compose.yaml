@@ -15,15 +15,15 @@ services:
       volumes:
       - ./data/db:/data/db
 
-  microservice:
-    build:
-      context: ./
-    ports:
-      - '3333:3333'
-    depends_on:
-      - mariadb
-    networks:
-      - dev-network
+  # microservice:
+  #   build:
+  #     context: ./
+  #   ports:
+  #     - '3333:3333'
+  #   depends_on:
+  #     - mariadb
+  #   networks:
+  #     - dev-network
 
 # DEV Network
 networks:
