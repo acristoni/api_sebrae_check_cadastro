@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserEntity } from './user.entity';
 
 @ApiTags('Verificação')
 @Controller()
@@ -22,5 +23,13 @@ export class AppController {
   })
   async validacao(@Param('cpf') cpf: string) {
     return await this.appService.validacao(cpf);
+  }
+
+  @Get('allusers')
+  @ApiOperation({
+    summary: 'Lista de todas as consultas já realizadas',
+  })
+  async findAll(): Promise<UserEntity[]> {
+    return await this.appService.findAll();
   }
 }

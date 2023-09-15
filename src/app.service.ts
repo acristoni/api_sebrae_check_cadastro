@@ -136,4 +136,12 @@ export class AppService {
         console.error('Erro:', error);
       });
   }
+
+  async findAll(): Promise<UserEntity[]> {
+    try {
+      return await this.userRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
 }
