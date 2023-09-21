@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { ValidacaoCpf } from './utils/validacaoCPF';
@@ -17,8 +17,6 @@ export class AppService {
     private userRepository: Repository<UserEntity>,
     private readonly validacaoCpf: ValidacaoCpf,
   ) {}
-
-  access_token: string;
 
   getHello(): string {
     return 'Microsserviço em execução!';
@@ -67,22 +65,23 @@ export class AppService {
 
     let situacao = 'NÃO está cadastrado';
 
-    if (this.access_token === undefined) {
-      this.getToken();
-    }
+    const access_token = await this.getToken();
 
     const headersList = {
       'Content-Type': 'application/json',
-      'API-TOKEN': this.access_token,
+      Authorization: 'Bearer ' + access_token,
     };
 
     const reqOptions = {
-      url: `https://api-chatbot.sebrae.com.br/v1/atendimento-sas/cliente?cpf=${cpf}`,
-      method: 'POST',
+      url: `https://chatbot-gestao-backend.homolog.sebrae.com.br/v1/atendimento-sas/cliente?cpf=${cpf}`,
+      method: 'GET',
       headers: headersList,
     };
 
-    const response = await axios.request(reqOptions);
+    const response: AxiosResponse | void = await axios
+      .request(reqOptions)
+      .then((res) => res)
+      .catch((err: AxiosError) => console.log('Error: ', err.message));
 
     if (
       response &&
@@ -108,12 +107,12 @@ export class AppService {
 
   async getToken() {
     const url =
-      'https://amei.sebrae.com.br/auth/realms/externo/protocol/openid-connect/token';
+      'https://amei.homolog.kubernetes.sebrae.com.br/auth/realms/externo/protocol/openid-connect/token';
 
     const formData = new URLSearchParams();
     formData.append('username', 'groodme@groodme.com.br');
     formData.append('password', "MkPg'be,}'&a3.{V");
-    formData.append('client_id', '372001399');
+    formData.append('client_id', 'conecta-sebrae');
     formData.append('grant_type', 'password');
 
     const config = {
@@ -122,12 +121,11 @@ export class AppService {
       },
     };
 
-    axios
+    return await axios
       .post(url, formData.toString(), config)
       .then((response) => {
-        console.log('Resposta:', response.data);
         if (response && response.data && response.data.access_token) {
-          this.access_token = response.data.access_token;
+          return response.data.access_token;
         }
       })
       .catch((error: AxiosError) => {
